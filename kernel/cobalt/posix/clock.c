@@ -339,10 +339,10 @@ int __cobalt_clock_nanosleep(clockid_t clock_id, int flags,
 	} else
 		timeout = ts2ns(rqt);
 
-	xnlock_get_irqsave(&nklock, s);
-
 	xnthread_suspend(cur, XNDELAY, timeout + 1,
 			 clock_flag(flags, clock_id), NULL);
+
+	xnlock_get_irqsave(&nklock, s);
 
 	if (xnthread_test_info(cur, XNBREAK)) {
 		if (signal_pending(current)) {
