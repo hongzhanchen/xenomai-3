@@ -888,6 +888,8 @@ void xnthread_suspend(struct xnthread *thread, int mask,
 	/* No built-in support for conjunctive wait. */
 	XENO_BUG_ON(COBALT, wchan && thread->wchan);
 
+	trace_cobalt_thread_suspend(thread, mask, timeout, timeout_mode, wchan);
+
 	xnlock_get_irqsave(&nklock, s);
 
 	trace_cobalt_thread_suspend(thread, mask, timeout, timeout_mode, wchan);
