@@ -339,6 +339,7 @@ int __cobalt_clock_nanosleep(clockid_t clock_id, int flags,
 	} else
 		timeout = ts2ns(rqt);
 
+	trace_cobalt_clock_nanosleep(clock_id, flags, rqt);
 	xnthread_suspend(cur, XNDELAY, timeout + 1,
 			 clock_flag(flags, clock_id), NULL);
 
