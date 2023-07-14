@@ -301,6 +301,7 @@ int __cobalt_clock_nanosleep(clockid_t clock_id, int flags,
 	struct xnthread *cur;
 	xnsticks_t timeout, rem;
 	spl_t s;
+	int test;
 
 	trace_cobalt_clock_nanosleep(clock_id, flags, rqt);
 
@@ -339,10 +340,13 @@ int __cobalt_clock_nanosleep(clockid_t clock_id, int flags,
 	} else
 		timeout = ts2ns(rqt);
 
-	trace_cobalt_clock_nanosleep(clock_id, flags, rqt);
+	test = 2;
+	trace_cobalt_clock_nanosleep(test, flags, rqt);
 	xnthread_suspend(cur, XNDELAY, timeout + 1,
 			 clock_flag(flags, clock_id), NULL);
-
+	
+	test = 3;
+	trace_cobalt_clock_nanosleep(test, flags, rqt);
 	xnlock_get_irqsave(&nklock, s);
 
 	if (xnthread_test_info(cur, XNBREAK)) {
@@ -368,8 +372,10 @@ int __cobalt_clock_nanosleep(clockid_t clock_id, int flags,
 
 		return -EINTR;
 	}
-
 	xnlock_put_irqrestore(&nklock, s);
+
+	test = 4;
+	trace_cobalt_clock_nanosleep(test, flags, rqt);
 
 	return 0;
 }

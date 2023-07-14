@@ -1029,6 +1029,7 @@ void xnthread_suspend(struct xnthread *thread, int mask,
 	    (mask & (XNDELAY | XNSUSP | XNHELD)) != 0)
 		__xnthread_signal(thread, SIGSHADOW, SIGSHADOW_ACTION_HARDEN);
 out:
+	trace_cobalt_thread_suspend(thread, mask, timeout, timeout_mode, wchan);
 	xnlock_put_irqrestore(&nklock, s);
 	return;
 
